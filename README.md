@@ -1,5 +1,5 @@
 # Paper Workflow
-![93c244eeda1bca47542f464d89cb073b](https://github.com/user-attachments/assets/59712a9f-fa6c-4baa-8adb-98c5947478df)
+<img width="1536" height="1024" alt="a3e7f7b86b1225a26e8b1379ee10620d" src="https://github.com/user-attachments/assets/b64ccfb1-ea0a-4136-90b5-ab92e4533910" />
 
 > Turn Claude Code into a research assistant. Search, ingest, retrieve, and analyze academic papers — without modifying a single line of CC source code.
 
