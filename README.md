@@ -19,18 +19,19 @@
 
 ## What it does
 
-```
+
 you: /paper-search "LLM agent reasoning 2024"
- CC: Found 20 papers across arXiv + Semantic Scholar…
+<img width="899" height="280" alt="00a7101fe6f828b8644a077b585bd726" src="https://github.com/user-attachments/assets/d2ddfe8d-f4d4-4f84-93e3-cff8a30e807e" />
+
 
 you: /paper-ingest 1,3,5
- CC: 3 papers downloaded, parsed, embedded, and indexed ✓
+<img width="900" height="194" alt="753fb6c83affc802666c327d80c438a1" src="https://github.com/user-attachments/assets/99ff9ba6-3469-46ba-9cc1-f5c62e86950b" />
+
 
 you: What attention variants exist in the literature?
- CC: Based on 8 evidence chunks from your library:
-     > "Multi-head attention allows the model to jointly attend…"
-     > — Attention Is All You Need (Vaswani et al., 2017), §3.2, p.4, score: 0.87
-```
+<img width="982" height="579" alt="487236c1a99b617a26dd894f9c42bf31" src="https://github.com/user-attachments/assets/9b9f72d9-cef8-4b53-b9c2-bfd82ac9d613" />
+
+
 
 Every claim is backed by a direct quote from the actual PDF — not the model's training data.
 
