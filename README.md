@@ -95,6 +95,18 @@ claude
 > Verify with: `python3 --version`
 
 <details>
+<summary>Disable / re-enable</summary>
+
+```bash
+bash scripts/paper-workflow.sh disable   # Pure coding mode, paper tools gone
+bash scripts/paper-workflow.sh enable    # Paper tools back instantly
+bash scripts/paper-workflow.sh status    # Check current state
+```
+
+Data and Python package are preserved across toggles — switching takes < 1 second.
+</details>
+
+<details>
 <summary>Uninstall</summary>
 
 ```bash

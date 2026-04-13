@@ -152,6 +152,16 @@ claude
 # 试试: /paper-search "transformer attention"
 ```
 
+### 启用 / 禁用
+
+```bash
+bash scripts/paper-workflow.sh disable   # 关闭论文模式，纯编程环境
+bash scripts/paper-workflow.sh enable    # 重新开启论文能力
+bash scripts/paper-workflow.sh status    # 查看当前状态
+```
+
+切换不影响已有数据，秒级生效。
+
 ### 卸载
 
 ```bash
