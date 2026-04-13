@@ -130,28 +130,36 @@ CC 原生做不到这些。Paper Workflow 让它做到了。
 ### 前置条件
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 已安装
-- Python >= 3.11
-- 约 500MB 磁盘空间（embedding 模型，如使用本地模式）
+- Python >= 3.11（通过 `python3 --version` 确认）
 
 ### 安装
 
 ```bash
 git clone https://github.com/Minazuki02/paper-workflow.git
 cd paper-workflow
-
-# 安装 Python 依赖
-pip install -e ./backend
-
-# （可选）安装本地 embedding 模型
-pip install -e "./backend[local-embedding]"
-
-# 配置环境变量
-cp .env.example .env
-# 编辑 .env，填入你的 embedding API 和 LLM API 配置
-
-# 启动 Claude Code — 自动加载论文工作流
-claude
+bash scripts/install.sh
 ```
+
+安装脚本会自动：
+1. 安装 Python 后端依赖
+2. 将 Skills、Agents、Rules、MCP Server 配置注入到 `~/.claude/`
+3. 创建本地数据目录
+
+安装完成后，在**任意目录**启动 Claude Code 即可使用论文能力：
+
+```bash
+claude
+# 试试: /paper-search "transformer attention"
+```
+
+### 卸载
+
+```bash
+cd paper-workflow
+bash scripts/uninstall.sh
+```
+
+干净移除所有注入到 `~/.claude/` 的配置，恢复原始 CC 环境。可选择是否删除论文数据和 Python 包。
 
 ### 支持的 embedding / LLM 配置
 

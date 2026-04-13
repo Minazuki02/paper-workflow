@@ -76,20 +76,35 @@ ChatGPT answers from training data. Paper Workflow answers from PDFs you actuall
 ```bash
 git clone https://github.com/Minazuki02/paper-workflow.git
 cd paper-workflow
+bash scripts/install.sh
+```
 
-# Install Python backend (must be Python ≥ 3.11)
-python3 -m pip install -e ./backend
+That's it. The install script:
+1. Installs the Python backend
+2. Registers MCP servers, skills, rules, and agents into `~/.claude/`
+3. Creates local data directories
 
-# Configure your embedding & LLM APIs
-cp .env.example .env
-# Edit .env with your API keys
+Now start Claude Code **from any directory**:
 
-# Launch Claude Code in the project directory — it auto-loads .claude/ config
+```bash
 claude
+# Try: /paper-search "transformer attention"
 ```
 
 > **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, `python3` ≥ 3.11 on PATH.
 > Verify with: `python3 --version`
+
+<details>
+<summary>Uninstall</summary>
+
+```bash
+cd paper-workflow
+bash scripts/uninstall.sh
+```
+
+Cleanly removes all injected config from `~/.claude/`. Your normal CC setup is restored.
+Optionally deletes paper data and the Python package.
+</details>
 
 <details>
 <summary>Model configuration options</summary>
