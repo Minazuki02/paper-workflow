@@ -1,7 +1,7 @@
 # Paper Workflow
 <img width="1536" height="1024" alt="a3e7f7b86b1225a26e8b1379ee10620d" src="https://github.com/user-attachments/assets/b64ccfb1-ea0a-4136-90b5-ab92e4533910" />
 
-> Turn Claude Code into a research assistant. Search, ingest, retrieve, and analyze academic papers — without modifying a single line of CC source code.
+> Turn Claude Code into a research assistant. Install in one command, remove in one command. Zero residue.
 
 [![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -12,7 +12,14 @@
 [![Demo](https://img.shields.io/badge/▶_Watch_Demo-30s-blue)]()
 -->
 
-**Paper Workflow** extends [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with academic paper superpowers through its native extension system (Skills, Agents, Rules, MCP Servers). Your coding workflow stays untouched — paper capabilities activate only when you need them.
+**Paper Workflow** is a fully removable plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It adds academic paper search, ingestion, retrieval, and analysis — without touching CC source code, without locking you in, and without breaking your coding workflow.
+
+```
+Install:    bash scripts/install.sh       → paper tools available everywhere
+Disable:    bash scripts/paper-workflow.sh disable  → pure coding mode, instant
+Re-enable:  bash scripts/paper-workflow.sh enable   → paper tools back, instant
+Uninstall:  bash scripts/uninstall.sh     → gone, zero traces in ~/.claude/
+```
 
 ### What it does
 
@@ -48,13 +55,20 @@ Every claim is backed by a direct quote from the actual PDF you ingested — not
 | "What does the literature say?" | LLM guesses from training data | Retrieves exact quotes with page numbers |
 | Verifying claims | No source, no confidence | Every answer includes paper title, section, page, score |
 | Building a knowledge base | Scattered notes | Persistent local library with vector + full-text search |
+| **Worried it breaks CC?** | — | **Disable in 1 second, uninstall in 1 command. Zero residue.** |
 
 **Claude Code is the best AI coding tool. This project makes it the best AI research tool too — in the same terminal.**
 
 <details>
-<summary><strong>Q: Won't this break my normal CC coding workflow?</strong></summary>
+<summary><strong>Q: Won't this mess up my CC setup?</strong></summary>
 
-No. Paper rules only activate when CC detects paper-related intent. Coding, git, file editing — everything works exactly as before.
+No. Install and uninstall are fully reversible:
+- `install.sh` writes a manifest of every file it creates
+- `uninstall.sh` reads that manifest and removes exactly those files
+- Your existing `~/.claude/settings.json` is merged, not replaced — and cleanly restored on uninstall
+- `disable` / `enable` toggles in < 1 second without touching your data
+
+If anything goes wrong, `bash scripts/uninstall.sh` is always a clean exit.
 </details>
 
 <details>
@@ -73,18 +87,20 @@ ChatGPT answers from training data. Paper Workflow answers from PDFs you actuall
 
 ## Quick Start
 
+### Install
+
 ```bash
 git clone https://github.com/Minazuki02/paper-workflow.git
 cd paper-workflow
 bash scripts/install.sh
 ```
 
-That's it. The install script:
-1. Installs the Python backend
-2. Registers MCP servers, skills, rules, and agents into `~/.claude/`
-3. Creates local data directories
+The install script:
+1. Checks Python ≥ 3.11 and installs the backend package
+2. Injects skills, agents, rules, and MCP server config into `~/.claude/`
+3. Writes a manifest (`~/.claude/.paper-workflow-manifest.json`) tracking every injected file
 
-Now start Claude Code **from any directory**:
+Now start Claude Code **from any directory** — paper tools are globally available:
 
 ```bash
 claude
@@ -94,29 +110,27 @@ claude
 > **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, `python3` ≥ 3.11 on PATH.
 > Verify with: `python3 --version`
 
-<details>
-<summary>Disable / re-enable</summary>
+### Switch modes
+
+Don't need papers right now? One command to turn it off, one to turn it back on:
 
 ```bash
-bash scripts/paper-workflow.sh disable   # Pure coding mode, paper tools gone
-bash scripts/paper-workflow.sh enable    # Paper tools back instantly
+bash scripts/paper-workflow.sh disable   # CC returns to pure coding mode
+bash scripts/paper-workflow.sh enable    # Paper tools restored instantly
 bash scripts/paper-workflow.sh status    # Check current state
 ```
 
-Data and Python package are preserved across toggles — switching takes < 1 second.
-</details>
+Your ingested papers and data are always preserved across toggles.
 
-<details>
-<summary>Uninstall</summary>
+### Uninstall
+
+Want it completely gone?
 
 ```bash
-cd paper-workflow
 bash scripts/uninstall.sh
 ```
 
-Cleanly removes all injected config from `~/.claude/`. Your normal CC setup is restored.
-Optionally deletes paper data and the Python package.
-</details>
+Reads the install manifest and removes exactly what was added — skills, agents, rules, MCP servers, hooks, permissions. Your `~/.claude/` is restored to its pre-install state. Optionally deletes paper data and the Python package.
 
 <details>
 <summary>Model configuration options</summary>
@@ -146,6 +160,7 @@ This project is in **early alpha**. The core pipeline works end-to-end, but roug
 | Single-paper analysis | ✅ Working | LLM-driven structured output |
 | 5 Claude Code skills | ✅ Working | search, ingest, evidence, analyze, status |
 | Batch ingest agent | ✅ Working | Background operation with progress tracking |
+| **Global install / uninstall / toggle** | ✅ Working | **Manifest-tracked, clean removal** |
 | Multi-paper comparison | 🔜 Planned | |
 | Literature review generation | 🔜 Planned | |
 | GROBID integration | 🔜 Planned | Higher quality PDF parsing |
@@ -157,7 +172,7 @@ This project is in **early alpha**. The core pipeline works end-to-end, but roug
 ```
 ┌──────────────────────────────────────┐
 │  Claude Code  (unmodified)           │
-│  Auto-loads .claude/ config          │
+│  Reads ~/.claude/ on every startup   │
 │  ┌────────┐ ┌────────┐ ┌──────────┐ │
 │  │ Skills │ │ Agents │ │ Rules    │ │
 │  └───┬────┘ └───┬────┘ └────┬─────┘ │
@@ -180,7 +195,10 @@ This project is in **early alpha**. The core pipeline works end-to-end, but roug
 └──────────────────────────────────────┘
 ```
 
-**Design principle:** CC doesn't touch data. Backend doesn't touch users. MCP bridges the two.
+**Design principles:**
+- CC doesn't touch data. Backend doesn't touch users. MCP bridges the two.
+- Everything injected into `~/.claude/` is tracked by a manifest — nothing is left behind on uninstall.
+- CC source code is never modified. All capabilities come through the official extension system.
 
 ### Built with
 
@@ -231,9 +249,13 @@ This project is a **complete reference implementation** of the Claude Code exten
 └── settings.json    ← Register your MCP servers
 
 backend/             ← Your domain backend
+scripts/
+├── install.sh       ← Your global installer (reuse the manifest pattern)
+├── uninstall.sh     ← Your clean uninstaller
+└── paper-workflow.sh ← Your enable/disable toggle
 ```
 
-The pattern — `search → ingest → retrieve → analyze` — applies to many domains:
+The pattern — `search → ingest → retrieve → analyze` with `install → disable → enable → uninstall` lifecycle — applies to many domains:
 
 - **Patent search & analysis**
 - **Legal case retrieval**
@@ -284,9 +306,14 @@ paper-workflow/
 │   ├── analysis/            # LLM-driven paper analysis
 │   └── common/              # Data models, config, error codes
 │
+├── scripts/
+│   ├── install.sh           # Global install → ~/.claude/
+│   ├── uninstall.sh         # Clean removal (manifest-based)
+│   └── paper-workflow.sh    # Enable / disable toggle
+│
 ├── tests/                   # 140+ test cases (unit, contract, integration, quality)
 ├── docs/                    # Architecture & design documents
-└── scripts/                 # Setup, server launcher, health check
+└── data/                    # Runtime data (gitignored)
 ```
 
 ---
