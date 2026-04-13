@@ -77,18 +77,19 @@ ChatGPT answers from training data. Paper Workflow answers from PDFs you actuall
 git clone https://github.com/Minazuki02/paper-workflow.git
 cd paper-workflow
 
-# Install Python backend
-pip install -e ./backend
+# Install Python backend (must be Python ≥ 3.11)
+python3 -m pip install -e ./backend
 
 # Configure your embedding & LLM APIs
 cp .env.example .env
 # Edit .env with your API keys
 
-# Launch Claude Code — it auto-loads .claude/ config
+# Launch Claude Code in the project directory — it auto-loads .claude/ config
 claude
 ```
 
-> **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, Python ≥ 3.11
+> **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, `python3` ≥ 3.11 on PATH.
+> Verify with: `python3 --version`
 
 <details>
 <summary>Model configuration options</summary>
