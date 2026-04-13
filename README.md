@@ -1,27 +1,21 @@
 # Paper Workflow
-<img width="1536" height="1024" alt="a3e7f7b86b1225a26e8b1379ee10620d" src="https://github.com/user-attachments/assets/b64ccfb1-ea0a-4136-90b5-ab92e4533910" />
 
 > Turn Claude Code into a research assistant. Install in one command, remove in one command. Zero residue.
 
-[![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2)](https://modelcontextprotocol.io)
-[![Tests](https://img.shields.io/badge/tests-140%2B-brightgreen)]()
+**把 Claude Code 变成论文研究助手——零侵入安装，一键拆卸。**
 
-<!-- TODO: replace with actual terminal recording
-[![Demo](https://img.shields.io/badge/▶_Watch_Demo-30s-blue)]()
--->
+[![Release](https://img.shields.io/github/v/release/Minazuki02/paper-workflow?include_prereleases&label=release&color=blue)](https://github.com/Minazuki02/paper-workflow/releases)
+[![Status: Alpha](https://img.shields.io/badge/status-alpha-orange)]()
+[![Python](https://img.shields.io/badge/python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-89_cases-brightgreen)]()
+[![MCP](https://img.shields.io/badge/protocol-MCP-8A2BE2)](https://modelcontextprotocol.io)
 
-**Paper Workflow** is a fully removable plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It adds academic paper search, ingestion, retrieval, and analysis — without touching CC source code, without locking you in, and without breaking your coding workflow.
+<img width="720" alt="Paper Workflow" src="https://github.com/user-attachments/assets/b64ccfb1-ea0a-4136-90b5-ab92e4533910" />
 
-```
-Install:    bash scripts/install.sh       → paper tools available everywhere
-Disable:    bash scripts/paper-workflow.sh disable  → pure coding mode, instant
-Re-enable:  bash scripts/paper-workflow.sh enable   → paper tools back, instant
-Uninstall:  bash scripts/uninstall.sh     → gone, zero traces in ~/.claude/
-```
+---
 
-### What it does
+## What it does
 
 ```
 you: /paper-search "LLM agent reasoning 2024"
@@ -34,60 +28,36 @@ you: What attention variants exist in the literature?
  CC: Based on 8 evidence chunks from your library:
      > "Multi-head attention allows the model to jointly attend…"
      > — Attention Is All You Need (Vaswani et al., 2017), §3.2, p.4, score: 0.87
-
-you: /paper-analyze <paper-id>
- CC: ## Summary
-     This paper introduces the Transformer architecture…
-     ## Key Findings  [3 evidence refs]
-     ## Limitations   [2 evidence refs]
 ```
 
-Every claim is backed by a direct quote from the actual PDF you ingested — not the model's training data.
+Every claim is backed by a direct quote from the actual PDF — not the model's training data.
+
+<!-- TODO: Add terminal screenshots when available
+<details>
+<summary><strong>See it in action (screenshots)</strong></summary>
+
+**Search & ingest papers:**
+<img width="680" alt="paper-search demo" src="docs/screenshots/search-ingest.png" />
+
+**Evidence retrieval with source tracking:**
+<img width="680" alt="evidence retrieval demo" src="docs/screenshots/evidence-retrieval.png" />
+
+</details>
+-->
 
 ---
 
-## Why this project?
+## Why this project
 
-| Pain point | Without Paper Workflow | With Paper Workflow |
-|---|---|---|
-| Finding papers | Open browser, search manually | `/paper-search` across arXiv + Semantic Scholar |
-| Reading PDFs | Read 30 pages yourself | Ingest → structured chunks → instant retrieval |
-| "What does the literature say?" | LLM guesses from training data | Retrieves exact quotes with page numbers |
-| Verifying claims | No source, no confidence | Every answer includes paper title, section, page, score |
-| Building a knowledge base | Scattered notes | Persistent local library with vector + full-text search |
-| **Worried it breaks CC?** | — | **Disable in 1 second, uninstall in 1 command. Zero residue.** |
-
-**Claude Code is the best AI coding tool. This project makes it the best AI research tool too — in the same terminal.**
-
-<details>
-<summary><strong>Q: Won't this mess up my CC setup?</strong></summary>
-
-No. Install and uninstall are fully reversible:
-- `install.sh` writes a manifest of every file it creates
-- `uninstall.sh` reads that manifest and removes exactly those files
-- Your existing `~/.claude/settings.json` is merged, not replaced — and cleanly restored on uninstall
-- `disable` / `enable` toggles in < 1 second without touching your data
-
-If anything goes wrong, `bash scripts/uninstall.sh` is always a clean exit.
-</details>
-
-<details>
-<summary><strong>Q: Why not a standalone app?</strong></summary>
-
-CC already solves the hard parts: natural language understanding, multi-step reasoning, tool orchestration. We only add the missing paper capabilities. When you finish analyzing papers, you can immediately ask CC to write code based on what you learned — in the same session.
-</details>
-
-<details>
-<summary><strong>Q: How is this different from asking ChatGPT to summarize a paper?</strong></summary>
-
-ChatGPT answers from training data. Paper Workflow answers from PDFs you actually ingested. Every evidence chunk links back to a specific paper, section, and page number. No hallucinated citations.
-</details>
+- **Evidence-first, not guessing.** Ask a research question → get exact quotes with paper title, page number, and relevance score. Not LLM hallucinations.
+- **Zero CC modification.** Installs through Claude Code's official extension system (Skills + MCP + Rules). Your coding workflow is untouched.
+- **Fully removable.** `install.sh` writes a manifest. `uninstall.sh` reads it and removes exactly those files. Disable/enable in < 1 second.
 
 ---
 
 ## Quick Start
 
-### Install
+### Already have Claude Code?
 
 ```bash
 git clone https://github.com/Minazuki02/paper-workflow.git
@@ -95,124 +65,87 @@ cd paper-workflow
 bash scripts/install.sh
 ```
 
-The install script:
-1. Checks Python ≥ 3.11 and installs the backend package
-2. Injects skills, agents, rules, and MCP server config into `~/.claude/`
-3. Writes a manifest (`~/.claude/.paper-workflow-manifest.json`) tracking every injected file
-
-Now start Claude Code **from any directory** — paper tools are globally available:
+Then start `claude` **from any directory** — paper tools are globally available:
 
 ```bash
 claude
 # Try: /paper-search "transformer attention"
 ```
 
-> **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, `python3` ≥ 3.11 on PATH.
-> Verify with: `python3 --version`
-
-### Switch modes
-
-Don't need papers right now? One command to turn it off, one to turn it back on:
+Toggle paper mode on/off without touching your data:
 
 ```bash
-bash scripts/paper-workflow.sh disable   # CC returns to pure coding mode
-bash scripts/paper-workflow.sh enable    # Paper tools restored instantly
-bash scripts/paper-workflow.sh status    # Check current state
+bash scripts/paper-workflow.sh disable   # pure coding mode
+bash scripts/paper-workflow.sh enable    # paper tools back
 ```
 
-Your ingested papers and data are always preserved across toggles.
+Full removal: `bash scripts/uninstall.sh`
 
-### Uninstall
+> **Requirements:** Python ≥ 3.11 · [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed
 
-Want it completely gone?
+### Just exploring?
+
+No Claude Code needed to browse the codebase or run backend tests:
 
 ```bash
-bash scripts/uninstall.sh
+git clone https://github.com/Minazuki02/paper-workflow.git
+cd paper-workflow
+pip install -e backend[dev]
+pytest tests/
 ```
 
-Reads the install manifest and removes exactly what was added — skills, agents, rules, MCP servers, hooks, permissions. Your `~/.claude/` is restored to its pre-install state. Optionally deletes paper data and the Python package.
-
-<details>
-<summary>Model configuration options</summary>
-
-Paper Workflow doesn't lock you into any specific model. Configure via `.env`:
-
-| Setup | Embedding | LLM | Cost |
-|-------|-----------|-----|------|
-| Local | sentence-transformers | CC's built-in model | Free |
-| API | Any OpenAI-compatible API | Any OpenAI-compatible API | Pay per use |
-| Hybrid | Local embedding + remote LLM | Your choice | Low cost |
-
-</details>
+See [Architecture →](docs/01_architecture_and_boundaries.md) for how it works.
 
 ---
 
-## Current Status
-
-This project is in **early alpha**. The core pipeline works end-to-end, but rough edges exist.
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Multi-source search (arXiv + Semantic Scholar) | ✅ Working | Deduplication, graceful fallback |
-| PDF download + parse (PyMuPDF) | ✅ Working | Best with arXiv-quality PDFs |
-| Chunk + embed + FAISS index | ✅ Working | Configurable embedding model |
-| Hybrid retrieval (vector + FTS5 + RRF) | ✅ Working | |
-| Single-paper analysis | ✅ Working | LLM-driven structured output |
-| 5 Claude Code skills | ✅ Working | search, ingest, evidence, analyze, status |
-| Batch ingest agent | ✅ Working | Background operation with progress tracking |
-| **Global install / uninstall / toggle** | ✅ Working | **Manifest-tracked, clean removal** |
-| Multi-paper comparison | 🔜 Planned | |
-| Literature review generation | 🔜 Planned | |
-| GROBID integration | 🔜 Planned | Higher quality PDF parsing |
-
----
-
-## Architecture
+## How it works
 
 ```
-┌──────────────────────────────────────┐
-│  Claude Code  (unmodified)           │
-│  Reads ~/.claude/ on every startup   │
-│  ┌────────┐ ┌────────┐ ┌──────────┐ │
-│  │ Skills │ │ Agents │ │ Rules    │ │
-│  └───┬────┘ └───┬────┘ └────┬─────┘ │
-│      └──────────┼───────────┘       │
-│            MCP Protocol (stdio)      │
-└─────────────────┼────────────────────┘
-                  │
-┌─────────────────▼────────────────────┐
-│  Python Backend  (this project)      │
-│  ┌───────────┐  ┌────────────┐      │
-│  │  Ingest   │  │ Retrieval  │      │
-│  │  Server   │  │ Server     │      │
-│  │  5 tools  │  │ 1 tool     │      │
-│  └─────┬─────┘  └──────┬─────┘      │
-│        └────────┬───────┘            │
-│        ┌────────▼────────┐           │
-│        │ SQLite + FAISS  │           │
-│        │ + PDF storage   │           │
-│        └─────────────────┘           │
-└──────────────────────────────────────┘
+┌─────────────────────────────┐
+│ Claude Code  (unmodified)   │
+│  Skills · Agents · Rules    │
+│         ↕ MCP (stdio)       │
+├─────────────────────────────┤
+│ Python Backend (this repo)  │
+│  Ingest → Retrieve → Analyze│
+│  SQLite + FAISS + PDF store │
+└─────────────────────────────┘
 ```
+
+CC stays the orchestrator. The backend does all heavy lifting (PDF parsing, embedding, retrieval) through [MCP](https://modelcontextprotocol.io).
 
 **Design principles:**
 - CC doesn't touch data. Backend doesn't touch users. MCP bridges the two.
 - Everything injected into `~/.claude/` is tracked by a manifest — nothing is left behind on uninstall.
 - CC source code is never modified. All capabilities come through the official extension system.
 
-### Built with
+[Full architecture →](docs/01_architecture_and_boundaries.md)
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Protocol | [MCP](https://modelcontextprotocol.io) (stdio) | CC ↔ Python backend communication |
-| PDF parsing | [PyMuPDF](https://pymupdf.readthedocs.io) | Text extraction, metadata, page mapping |
-| Vector search | [FAISS](https://github.com/facebookresearch/faiss) | Similarity search over paper chunks |
-| Metadata + FTS | [SQLite](https://sqlite.org) + FTS5 | Structured storage + full-text search |
-| Data models | [Pydantic](https://docs.pydantic.dev) v2 | Schema validation (Paper, Chunk, IngestJob…) |
-| Embedding | Configurable | Local sentence-transformers or any OpenAI-compatible API |
-| Academic search | arXiv API + Semantic Scholar API | Dual-source discovery with deduplication |
+---
 
-All components are replaceable. See [Component Swapping](#component-swapping) below.
+## Status — v0.1.0-alpha
+
+> This is an **early alpha**. The core pipeline works end-to-end, but rough edges exist.
+
+| Feature | Status |
+|---------|--------|
+| Multi-source search (arXiv + Semantic Scholar) | ✅ Working |
+| PDF download + parse (PyMuPDF) | ✅ Working |
+| Chunk + embed + FAISS index | ✅ Working |
+| Hybrid retrieval (vector + FTS5 + RRF) | ✅ Working |
+| Single-paper analysis | ✅ Working |
+| 5 Claude Code skills | ✅ Working |
+| Global install / uninstall / toggle | ✅ Working |
+| Multi-paper comparison | 🔜 Planned |
+| Literature review generation | 🔜 Planned |
+| GROBID integration | 🔜 Planned |
+
+### Known limitations
+
+- PDF parsing works best with text-based PDFs (arXiv-quality). Scanned/image PDFs are not yet supported.
+- First MCP tool call has a cold-start delay (~2-3s) while the Python process loads.
+- Embedding model (`all-MiniLM-L6-v2`) is English-optimized. Non-English papers may have lower retrieval quality.
+- No Windows testing yet. macOS and Linux are the primary platforms.
 
 ---
 
@@ -236,93 +169,25 @@ All components are replaceable. See [Component Swapping](#component-swapping) be
 
 ---
 
-## For Developers: Fork & Adapt
+## Documentation
 
-This project is a **complete reference implementation** of the Claude Code extension system. If you want to build CC-powered workflows for your own domain, fork this repo and change three things:
-
-```
-.claude/
-├── CLAUDE.md        ← Your domain rules
-├── rules/           ← Your routing logic
-├── skills/          ← Your user-facing commands
-├── agents/          ← Your background task runners
-└── settings.json    ← Register your MCP servers
-
-backend/             ← Your domain backend
-scripts/
-├── install.sh       ← Your global installer (reuse the manifest pattern)
-├── uninstall.sh     ← Your clean uninstaller
-└── paper-workflow.sh ← Your enable/disable toggle
-```
-
-The pattern — `search → ingest → retrieve → analyze` with `install → disable → enable → uninstall` lifecycle — applies to many domains:
-
-- **Patent search & analysis**
-- **Legal case retrieval**
-- **Internal knowledge base** (wiki → searchable AI assistant)
-- **Financial report analysis**
-- **Medical literature review**
-
-### CC Extension Mechanisms Used
-
-| Mechanism | Format | What it does | Example in this project |
-|-----------|--------|-------------|------------------------|
-| CLAUDE.md | Markdown | Injects system-level rules, auto-loaded every session | Paper routing rules, output format constraints |
-| Skills | Markdown + frontmatter | User-invokable `/` commands | `/paper-search`, `/paper-ingest` |
-| Agents | Markdown + frontmatter | Background task runners with isolated context | Batch ingest operator |
-| MCP Server | Any language | Exposes external tools to CC via standard protocol | Python ingest/retrieval servers |
-
----
-
-## Component Swapping
-
-| Component | Current | Can be replaced with |
-|-----------|---------|---------------------|
-| PDF parsing | PyMuPDF | GROBID (structured parsing) |
-| Vector index | FAISS | Qdrant / Milvus / Chroma |
-| Metadata store | SQLite + FTS5 | PostgreSQL |
-| Embedding | Configurable | Any OpenAI-compatible API or local model |
-| LLM | Configurable | Any OpenAI-compatible API |
-| Search sources | arXiv + Semantic Scholar | PubMed / DBLP / Google Scholar |
-
----
-
-## Project Structure
-
-```
-paper-workflow/
-├── .claude/                 # CC extension config (pure markdown)
-│   ├── CLAUDE.md            # Paper routing rules entry point
-│   ├── rules/               # Routing, output format, error handling
-│   ├── skills/              # 5 user-facing slash commands
-│   ├── agents/              # Background task agents
-│   └── settings.json        # MCP server registration + permissions
-│
-├── backend/                 # Python paper processing backend
-│   ├── ingest/              # Ingest MCP Server (download/parse/index)
-│   ├── retrieval/           # Retrieval MCP Server (vector+FTS search)
-│   ├── search/              # arXiv + Semantic Scholar providers
-│   ├── storage/             # SQLite + FAISS + PDF file management
-│   ├── analysis/            # LLM-driven paper analysis
-│   └── common/              # Data models, config, error codes
-│
-├── scripts/
-│   ├── install.sh           # Global install → ~/.claude/
-│   ├── uninstall.sh         # Clean removal (manifest-based)
-│   └── paper-workflow.sh    # Enable / disable toggle
-│
-├── tests/                   # 140+ test cases (unit, contract, integration, quality)
-├── docs/                    # Architecture & design documents
-└── data/                    # Runtime data (gitignored)
-```
+| Doc | Description |
+|-----|-------------|
+| [Architecture](docs/01_architecture_and_boundaries.md) | Four-layer design, data flow, extension mechanisms |
+| [Schema & Tool Contracts](docs/02_schema_and_tool_contracts.md) | Data models, state machine, MCP tool interfaces |
+| [Claude Code Adaptation](docs/03_claude_code_adaptation.md) | Skills, agents, hooks, CLAUDE.md design |
+| [Implementation Plan](docs/04_implementation_plan.md) | Sprint breakdown, test strategy, risk mitigation |
+| [Fork & Adapt Guide](docs/fork-guide.md) | How to repurpose this for patents, legal, finance, etc. |
+| [Configuration](docs/configuration.md) | Embedding models, LLM setup, environment variables |
+| [FAQ](docs/faq.md) | Common questions about safety, scope, and alternatives |
 
 ---
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-If you've adapted this project for another domain, we'd love to hear about it — open an issue to share.
+If you've adapted this for another domain, open an issue to share.
 
 ## License
 
@@ -330,6 +195,4 @@ If you've adapted this project for another domain, we'd love to hear about it �
 
 ---
 
-<p align="center">
-  <a href="README.zh-CN.md">中文版 README</a>
-</p>
+<p align="center"><a href="README.zh-CN.md">中文版 README</a></p>
