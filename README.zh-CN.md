@@ -1,5 +1,5 @@
 # Paper Workflow
-![Uploading a3e7f7b86b1225a26e8b1379ee10620d.png…]()
+<img width="1536" height="1024" alt="c0ed14dc30be79375bdd03ec8f4c9f46" src="https://github.com/user-attachments/assets/7e2434d2-034c-4f5d-8b8c-ebd25f3162d3" />
 
 [![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
 [![MCP](https://img.shields.io/badge/Protocol-MCP_(stdio)-8A2BE2)](https://modelcontextprotocol.io)
