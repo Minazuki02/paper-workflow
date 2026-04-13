@@ -17,15 +17,16 @@
 
 ```
 你: /paper-search "LLM agent reasoning 2024"
-CC: 从 arXiv + Semantic Scholar 搜索到 20 篇论文……
+<img width="899" height="280" alt="00a7101fe6f828b8644a077b585bd726" src="https://github.com/user-attachments/assets/75bbf60b-5000-4a0b-b94b-c2399ba43f94" />
+
 
 你: /paper-ingest 1,3,5
-CC: 3 篇论文下载、解析、embedding、入库完成 ✓
+<img width="900" height="194" alt="753fb6c83affc802666c327d80c438a1" src="https://github.com/user-attachments/assets/0d03eb49-c50a-4ce8-9307-e6de427258d6" />
+
 
 你: multi-head attention 的主要变体有哪些？
-CC: 基于已入库论文检索到 8 条证据：
-    > "Multi-head attention allows the model to jointly attend..."
-    > — Attention Is All You Need (Vaswani et al., 2017), §3.2, p.4, score: 0.87
+<img width="982" height="579" alt="487236c1a99b617a26dd894f9c42bf31" src="https://github.com/user-attachments/assets/6b63590e-d96f-40ac-bd75-3c6c9b637f9a" />
+
 ```
 
 每一条结论都有 PDF 原文引用——不是模型在猜，是在查。
