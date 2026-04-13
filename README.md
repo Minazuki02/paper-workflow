@@ -1,270 +1,279 @@
 # Paper Workflow
 
+> Turn Claude Code into a research assistant. Search, ingest, retrieve, and analyze academic papers — without modifying a single line of CC source code.
+
 [![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
-[![MCP](https://img.shields.io/badge/Protocol-MCP_(stdio)-8A2BE2)](https://modelcontextprotocol.io)
-[![FAISS](https://img.shields.io/badge/Vector_Search-FAISS-0467DF)](https://github.com/facebookresearch/faiss)
-[![SQLite](https://img.shields.io/badge/Metadata-SQLite_+_FTS5-003B57?logo=sqlite&logoColor=white)](https://sqlite.org)
-[![PyMuPDF](https://img.shields.io/badge/PDF_Parse-PyMuPDF-CC0000)](https://pymupdf.readthedocs.io)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![MCP](https://img.shields.io/badge/Protocol-MCP-8A2BE2)](https://modelcontextprotocol.io)
+[![Tests](https://img.shields.io/badge/tests-140%2B-brightgreen)]()
 
-**把 Claude Code 变成你的论文研究助手，零侵入，5 分钟上手。**
+<!-- TODO: replace with actual terminal recording
+[![Demo](https://img.shields.io/badge/▶_Watch_Demo-30s-blue)]()
+-->
 
-Claude Code 是目前最强的 AI 编程工具，但它不懂论文。
-Paper Workflow 通过 CC 的原生扩展机制，让它学会搜论文、读论文、检索证据、结构化分析——
-**不改一行 CC 源码，不影响你原有的编程体验。**
+**Paper Workflow** extends [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with academic paper superpowers through its native extension system (Skills, Agents, Rules, MCP Servers). Your coding workflow stays untouched — paper capabilities activate only when you need them.
+
+### What it does
 
 ```
-你: /paper-search "LLM agent reasoning 2024"
-CC: 从 arXiv + Semantic Scholar 搜索到 20 篇论文……
+you: /paper-search "LLM agent reasoning 2024"
+ CC: Found 20 papers across arXiv + Semantic Scholar…
 
-你: /paper-ingest 1,3,5
-CC: 3 篇论文下载、解析、embedding、入库完成 ✓
+you: /paper-ingest 1,3,5
+ CC: 3 papers downloaded, parsed, embedded, and indexed ✓
 
-你: multi-head attention 的主要变体有哪些？
-CC: 基于已入库论文检索到 8 条证据：
-    > "Multi-head attention allows the model to jointly attend..."
-    > — Attention Is All You Need (Vaswani et al., 2017), §3.2, p.4
+you: What attention variants exist in the literature?
+ CC: Based on 8 evidence chunks from your library:
+     > "Multi-head attention allows the model to jointly attend…"
+     > — Attention Is All You Need (Vaswani et al., 2017), §3.2, p.4, score: 0.87
 
-你: /paper-analyze <paper-id>
-CC: ## Summary
-    本文提出了 Transformer 架构……
-    ## Contributions
-    - 首个完全基于注意力机制的序列转导模型……
+you: /paper-analyze <paper-id>
+ CC: ## Summary
+     This paper introduces the Transformer architecture…
+     ## Key Findings  [3 evidence refs]
+     ## Limitations   [2 evidence refs]
 ```
+
+Every claim is backed by a direct quote from the actual PDF you ingested — not the model's training data.
 
 ---
 
-## 为什么需要这个项目？
+## Why this project?
 
-### Q: Claude Code 已经很强了，为什么还要装你这个？
-
-CC 的强项是**写代码**。但当你做科研时，你需要的不是写代码——你需要：
-
-- 搜 50 篇论文，不想一篇篇打开浏览器
-- 把 PDF 里的内容变成可检索的知识库
-- 问"XXX 领域的主流方法有哪些"，并要求每句话都有论文出处
-- 对一篇论文做结构化拆解：方法、贡献、局限、未来方向
-
-CC 原生做不到这些。Paper Workflow 让它做到了。
-
-### Q: 这跟直接问 ChatGPT "帮我总结论文" 有什么区别？
-
-| | ChatGPT / 直接问 LLM | Paper Workflow |
+| Pain point | Without Paper Workflow | With Paper Workflow |
 |---|---|---|
-| 数据来源 | 训练数据（可能过时或幻觉） | 你亲手入库的 PDF 原文 |
-| 可溯源 | ❌ 无法验证出处 | ✅ 每条证据附带论文标题、页码、原文引用 |
-| 知识范围 | 固定，无法新增 | 持续 ingest 新论文，知识库不断增长 |
-| 检索方式 | 无 | 向量检索 + 全文检索 + 混合排序 |
-| 分析深度 | 泛泛而谈 | 结构化输出：方法论、贡献、局限、证据链 |
+| Finding papers | Open browser, search manually | `/paper-search` across arXiv + Semantic Scholar |
+| Reading PDFs | Read 30 pages yourself | Ingest → structured chunks → instant retrieval |
+| "What does the literature say?" | LLM guesses from training data | Retrieves exact quotes with page numbers |
+| Verifying claims | No source, no confidence | Every answer includes paper title, section, page, score |
+| Building a knowledge base | Scattered notes | Persistent local library with vector + full-text search |
 
-**一句话：LLM 在猜，Paper Workflow 在查。**
+**Claude Code is the best AI coding tool. This project makes it the best AI research tool too — in the same terminal.**
 
-### Q: 为什么不做成独立产品，非要依赖 Claude Code？
+<details>
+<summary><strong>Q: Won't this break my normal CC coding workflow?</strong></summary>
 
-因为 CC 已经解决了最难的部分：
+No. Paper rules only activate when CC detects paper-related intent. Coding, git, file editing — everything works exactly as before.
+</details>
 
-- **自然语言理解** — 你不需要学命令语法，直接说话
-- **多步推理** — CC 自动判断该搜论文还是查库还是做分析
-- **工具编排** — 搜索 → 下载 → 入库 → 检索 → 分析，CC 自动串联
-- **编程能力保留** — 分析完论文，下一句就能让它帮你写代码实现
+<details>
+<summary><strong>Q: Why not a standalone app?</strong></summary>
 
-我们不重复造轮子，只补上 CC 缺失的论文能力。
+CC already solves the hard parts: natural language understanding, multi-step reasoning, tool orchestration. We only add the missing paper capabilities. When you finish analyzing papers, you can immediately ask CC to write code based on what you learned — in the same session.
+</details>
 
-### Q: 安装后会影响我用 CC 写代码吗？
+<details>
+<summary><strong>Q: How is this different from asking ChatGPT to summarize a paper?</strong></summary>
 
-**完全不会。** 论文规则仅在检测到论文相关意图时激活。你正常写代码、debug、git 操作，跟没装一样。
-
-### Q: 我能用在自己的场景吗？比如改成专利检索、法律文书分析？
-
-**这正是本项目最大的价值之一。** 往下看"给想 fork 改造的开发者"章节。
-
----
-
-## 架构
-
-```
-┌──────────────────────────────────┐
-│  Claude Code（不修改）            │
-│  自动加载 .claude/ 下的配置        │
-│  ┌────────┐ ┌────────┐ ┌──────┐ │
-│  │ Skills │ │ Agents │ │ Rules│ │
-│  └────┬───┘ └────┬───┘ └──┬───┘ │
-│       │     MCP Protocol  │     │
-└───────┼──────────┼────────┼─────┘
-        │          │        │
-┌───────▼──────────▼────────▼─────┐
-│  Python Backend（本项目）         │
-│  ┌─────────┐ ┌──────────┐       │
-│  │ Ingest  │ │ Retrieval│       │
-│  │ Server  │ │ Server   │       │
-│  └────┬────┘ └─────┬────┘       │
-│       │             │            │
-│  ┌────▼─────────────▼────┐      │
-│  │ SQLite + FAISS + PDF  │      │
-│  └───────────────────────┘      │
-└─────────────────────────────────┘
-```
-
-**核心设计：CC 不碰数据，Backend 不碰用户。** 通过 MCP 协议桥接，两侧完全解耦。
-
-### Built With
-
-| 层 | 技术 | 用途 |
-|---|---|---|
-| **协议层** | [MCP](https://modelcontextprotocol.io) (stdio) | Claude Code ↔ Python Backend 的标准通信协议 |
-| **PDF 解析** | [PyMuPDF](https://pymupdf.readthedocs.io) 1.24+ | 文本提取、页码映射、元数据抽取 |
-| **向量检索** | [FAISS](https://github.com/facebookresearch/faiss) 1.8+ | 高性能相似度搜索（百万级向量 <100ms） |
-| **元数据 + 全文检索** | [SQLite](https://sqlite.org) + FTS5 | 零依赖的结构化存储 + 全文搜索引擎 |
-| **数据模型** | [Pydantic](https://docs.pydantic.dev) v2 | 强类型 schema 校验（Paper, Chunk, IngestJob 等） |
-| **Embedding** | 可选：本地 [sentence-transformers](https://sbert.net) 或任意 OpenAI-compatible API | 文本向量化，支持自选模型 |
-| **LLM** | 任意 OpenAI-compatible API | 论文分析（GLM、Qwen、GPT 等均可） |
-| **学术搜索** | [arXiv API](https://arxiv.org/help/api) + [Semantic Scholar API](https://api.semanticscholar.org) | 双源搜索、自动去重 |
-| **日志** | [structlog](https://www.structlog.org) | JSON 结构化日志 |
-| **测试** | [pytest](https://pytest.org) | 140+ 测试用例 |
+ChatGPT answers from training data. Paper Workflow answers from PDFs you actually ingested. Every evidence chunk links back to a specific paper, section, and page number. No hallucinated citations.
+</details>
 
 ---
 
-## 快速开始
-
-### 前置条件
-
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 已安装
-- Python >= 3.11
-- 约 500MB 磁盘空间（embedding 模型，如使用本地模式）
-
-### 安装
+## Quick Start
 
 ```bash
 git clone https://github.com/Minazuki02/paper-workflow.git
 cd paper-workflow
 
-# 安装 Python 依赖
+# Install Python backend
 pip install -e ./backend
 
-# （可选）安装本地 embedding 模型
-pip install -e "./backend[local-embedding]"
-
-# 配置环境变量
+# Configure your embedding & LLM APIs
 cp .env.example .env
-# 编辑 .env，填入你的 embedding API 和 LLM API 配置
+# Edit .env with your API keys
 
-# 启动 Claude Code — 自动加载论文工作流
+# Launch Claude Code — it auto-loads .claude/ config
 claude
 ```
 
-### 支持的 embedding / LLM 配置
+> **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, Python ≥ 3.11
 
-Paper Workflow 不绑定特定模型。通过 `.env` 配置即可切换：
+<details>
+<summary>Model configuration options</summary>
 
-| 方案 | embedding | LLM | 成本 |
-|------|-----------|-----|------|
-| 全本地 | sentence-transformers | — (用 CC 自带) | 免费 |
-| API 模式 | OpenAI-compatible API | 任意 LLM API | 按量付费 |
-| 混合 | 本地 embedding + 远程 LLM | 自选 | 低成本 |
+Paper Workflow doesn't lock you into any specific model. Configure via `.env`:
 
----
+| Setup | Embedding | LLM | Cost |
+|-------|-----------|-----|------|
+| Local | sentence-transformers | CC's built-in model | Free |
+| API | Any OpenAI-compatible API | Any OpenAI-compatible API | Pay per use |
+| Hybrid | Local embedding + remote LLM | Your choice | Low cost |
 
-## 功能一览
-
-| 命令 | 功能 | 状态 |
-|------|------|------|
-| `/paper-search` | 从 arXiv + Semantic Scholar 搜索论文 | ✅ 可用 |
-| `/paper-ingest` | 下载 PDF → 解析 → embedding → 入库 | ✅ 可用 |
-| `/paper-evidence` | 从已入库论文中检索证据（向量 + 全文 + 混合排序） | ✅ 可用 |
-| `/paper-analyze` | 单篇论文结构化分析（方法、贡献、发现、局限） | ✅ 可用 |
-| `/paper-status` | 查看 ingest 状态和库概况 | ✅ 可用 |
-| `/paper-compare` | 多篇论文对比 | 🔜 开发中 |
-| `/paper-synthesize` | 自动生成文献综述 | 🔜 规划中 |
+</details>
 
 ---
 
-## 给想 fork 改造的开发者
+## Current Status
 
-本项目是 **Claude Code 扩展机制的完整参考实现**。如果你想基于 CC 构建自己领域的 AI 工作流，这里是你需要的一切。
+This project is in **early alpha**. The core pipeline works end-to-end, but rough edges exist.
 
-### CC 的四种扩展机制
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Multi-source search (arXiv + Semantic Scholar) | ✅ Working | Deduplication, graceful fallback |
+| PDF download + parse (PyMuPDF) | ✅ Working | Best with arXiv-quality PDFs |
+| Chunk + embed + FAISS index | ✅ Working | Configurable embedding model |
+| Hybrid retrieval (vector + FTS5 + RRF) | ✅ Working | |
+| Single-paper analysis | ✅ Working | LLM-driven structured output |
+| 5 Claude Code skills | ✅ Working | search, ingest, evidence, analyze, status |
+| Batch ingest agent | ✅ Working | Background operation with progress tracking |
+| Multi-paper comparison | 🔜 Planned | |
+| Literature review generation | 🔜 Planned | |
+| GROBID integration | 🔜 Planned | Higher quality PDF parsing |
 
-| 机制 | 文件格式 | 作用 | 本项目示例 |
-|------|---------|------|-----------|
-| **CLAUDE.md** | markdown | 注入系统级规则，CC 每次对话自动加载 | 论文路由规则、输出格式约束 |
-| **Skills** | markdown + frontmatter | 用户通过 `/` 命令触发的操作 | `/paper-search`、`/paper-ingest` |
-| **Agents** | markdown + frontmatter | 后台长任务执行者，有独立上下文和受限工具集 | 批量 ingest agent |
-| **MCP Server** | 任意语言 | 通过标准协议暴露外部工具给 CC 调用 | Python ingest/retrieval 服务 |
+---
 
-### 改造路线
+## Architecture
 
-整个项目结构为改造而设计：
+```
+┌──────────────────────────────────────┐
+│  Claude Code  (unmodified)           │
+│  Auto-loads .claude/ config          │
+│  ┌────────┐ ┌────────┐ ┌──────────┐ │
+│  │ Skills │ │ Agents │ │ Rules    │ │
+│  └───┬────┘ └───┬────┘ └────┬─────┘ │
+│      └──────────┼───────────┘       │
+│            MCP Protocol (stdio)      │
+└─────────────────┼────────────────────┘
+                  │
+┌─────────────────▼────────────────────┐
+│  Python Backend  (this project)      │
+│  ┌───────────┐  ┌────────────┐      │
+│  │  Ingest   │  │ Retrieval  │      │
+│  │  Server   │  │ Server     │      │
+│  │  5 tools  │  │ 1 tool     │      │
+│  └─────┬─────┘  └──────┬─────┘      │
+│        └────────┬───────┘            │
+│        ┌────────▼────────┐           │
+│        │ SQLite + FAISS  │           │
+│        │ + PDF storage   │           │
+│        └─────────────────┘           │
+└──────────────────────────────────────┘
+```
+
+**Design principle:** CC doesn't touch data. Backend doesn't touch users. MCP bridges the two.
+
+### Built with
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Protocol | [MCP](https://modelcontextprotocol.io) (stdio) | CC ↔ Python backend communication |
+| PDF parsing | [PyMuPDF](https://pymupdf.readthedocs.io) | Text extraction, metadata, page mapping |
+| Vector search | [FAISS](https://github.com/facebookresearch/faiss) | Similarity search over paper chunks |
+| Metadata + FTS | [SQLite](https://sqlite.org) + FTS5 | Structured storage + full-text search |
+| Data models | [Pydantic](https://docs.pydantic.dev) v2 | Schema validation (Paper, Chunk, IngestJob…) |
+| Embedding | Configurable | Local sentence-transformers or any OpenAI-compatible API |
+| Academic search | arXiv API + Semantic Scholar API | Dual-source discovery with deduplication |
+
+All components are replaceable. See [Component Swapping](#component-swapping) below.
+
+---
+
+## MCP Tools
+
+### Ingest Server
+
+| Tool | Description |
+|------|-------------|
+| `search_papers` | Search arXiv + Semantic Scholar with deduplication |
+| `fetch_pdf` | Download a PDF without triggering the full pipeline |
+| `ingest_paper` | Full pipeline: download → parse → chunk → embed → index |
+| `batch_ingest` | Batch ingest up to 100 papers |
+| `get_ingest_status` | Check job or paper processing status |
+
+### Retrieval Server
+
+| Tool | Description |
+|------|-------------|
+| `retrieve_evidence` | Hybrid search (vector + full-text + RRF ranking) with metadata filters |
+
+---
+
+## For Developers: Fork & Adapt
+
+This project is a **complete reference implementation** of the Claude Code extension system. If you want to build CC-powered workflows for your own domain, fork this repo and change three things:
 
 ```
 .claude/
-├── CLAUDE.md        ← 改成你的领域规则
-├── rules/           ← 改成你的路由逻辑
-├── skills/          ← 改成你的用户命令
-├── agents/          ← 改成你的任务执行者
-└── settings.json    ← 注册你自己的 MCP Server
+├── CLAUDE.md        ← Your domain rules
+├── rules/           ← Your routing logic
+├── skills/          ← Your user-facing commands
+├── agents/          ← Your background task runners
+└── settings.json    ← Register your MCP servers
 
-backend/             ← 换成你的领域后端
+backend/             ← Your domain backend
 ```
 
-只要你的场景符合"搜索 → 入库 → 检索 → 分析"模式，fork 本项目改 3 样东西就能用：
+The pattern — `search → ingest → retrieve → analyze` — applies to many domains:
 
-1. **`backend/`** — 换掉 PDF 解析为你的数据源解析
-2. **`.claude/skills/`** — 改掉 skill 名称和 prompt
-3. **`.claude/rules/`** — 改掉路由规则
+- **Patent search & analysis**
+- **Legal case retrieval**
+- **Internal knowledge base** (wiki → searchable AI assistant)
+- **Financial report analysis**
+- **Medical literature review**
 
-CC 的 MCP 协议、skill 加载、agent 调度这些重活，已经帮你搭好了。
+### CC Extension Mechanisms Used
 
-### 适合改造的方向
-
-- 专利检索与分析
-- 法律文书 / 判例检索
-- 技术文档知识库（内部 wiki → 可检索的 AI 助手）
-- 财报 / 研报分析
-- 医学文献循证分析
+| Mechanism | Format | What it does | Example in this project |
+|-----------|--------|-------------|------------------------|
+| CLAUDE.md | Markdown | Injects system-level rules, auto-loaded every session | Paper routing rules, output format constraints |
+| Skills | Markdown + frontmatter | User-invokable `/` commands | `/paper-search`, `/paper-ingest` |
+| Agents | Markdown + frontmatter | Background task runners with isolated context | Batch ingest operator |
+| MCP Server | Any language | Exposes external tools to CC via standard protocol | Python ingest/retrieval servers |
 
 ---
 
-## 项目结构
+## Component Swapping
+
+| Component | Current | Can be replaced with |
+|-----------|---------|---------------------|
+| PDF parsing | PyMuPDF | GROBID (structured parsing) |
+| Vector index | FAISS | Qdrant / Milvus / Chroma |
+| Metadata store | SQLite + FTS5 | PostgreSQL |
+| Embedding | Configurable | Any OpenAI-compatible API or local model |
+| LLM | Configurable | Any OpenAI-compatible API |
+| Search sources | arXiv + Semantic Scholar | PubMed / DBLP / Google Scholar |
+
+---
+
+## Project Structure
 
 ```
 paper-workflow/
-├── .claude/                 # CC 扩展配置（纯 markdown，即改即生效）
-│   ├── CLAUDE.md            # 论文路由规则入口
-│   ├── rules/               # 路由、输出格式、错误处理规则
-│   ├── skills/              # 用户命令定义
-│   ├── agents/              # 子任务执行者定义
-│   └── settings.json        # MCP Server 注册 + 权限
+├── .claude/                 # CC extension config (pure markdown)
+│   ├── CLAUDE.md            # Paper routing rules entry point
+│   ├── rules/               # Routing, output format, error handling
+│   ├── skills/              # 5 user-facing slash commands
+│   ├── agents/              # Background task agents
+│   └── settings.json        # MCP server registration + permissions
 │
-├── backend/                 # Python 论文处理后端
-│   ├── ingest/              # Ingest MCP Server（下载/解析/入库）
-│   ├── retrieval/           # Retrieval MCP Server（向量+全文检索）
-│   ├── search/              # arXiv + Semantic Scholar 搜索
-│   ├── storage/             # SQLite + FAISS + PDF 文件管理
-│   ├── analysis/            # 论文分析
-│   └── common/              # 数据模型 + 配置 + 错误码
+├── backend/                 # Python paper processing backend
+│   ├── ingest/              # Ingest MCP Server (download/parse/index)
+│   ├── retrieval/           # Retrieval MCP Server (vector+FTS search)
+│   ├── search/              # arXiv + Semantic Scholar providers
+│   ├── storage/             # SQLite + FAISS + PDF file management
+│   ├── analysis/            # LLM-driven paper analysis
+│   └── common/              # Data models, config, error codes
 │
-├── tests/                   # 140+ 测试用例
-├── docs/                    # 架构设计文档
-└── scripts/                 # 环境初始化 + 健康检查脚本
+├── tests/                   # 140+ test cases (unit, contract, integration, quality)
+├── docs/                    # Architecture & design documents
+└── scripts/                 # Setup, server launcher, health check
 ```
 
-## 组件可替换性
-
-所有核心组件均可按需替换，不影响其他模块：
-
-| 组件 | 当前选型 | 可替换为 |
-|------|---------|---------|
-| PDF 解析 | PyMuPDF | GROBID（高质量结构化解析） |
-| 向量索引 | FAISS | Qdrant / Milvus / Chroma |
-| 元数据存储 | SQLite + FTS5 | PostgreSQL |
-| Embedding 模型 | 可配置 | 任意 OpenAI-compatible API 或本地模型 |
-| LLM | 可配置 | 任意 OpenAI-compatible API |
-| 搜索源 | arXiv + Semantic Scholar | PubMed / DBLP / Google Scholar |
+---
 
 ## Contributing
 
-欢迎 PR 和 Issue。如果你基于本项目做了其他领域的改造，欢迎在 Issue 中分享。
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+If you've adapted this project for another domain, we'd love to hear about it — open an issue to share.
 
 ## License
 
-MIT
+[MIT](LICENSE)
+
+---
+
+<p align="center">
+  <a href="README.zh-CN.md">中文版 README</a>
+</p>

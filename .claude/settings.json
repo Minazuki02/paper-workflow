@@ -29,19 +29,9 @@
       "mcp__paper_ingest__ingest_paper",
       "mcp__paper_ingest__get_ingest_status",
       "mcp__paper_ingest__fetch_pdf",
-      "mcp__paper_retrieval__retrieve_evidence",
-      "Bash(ls /Users/sunzhangyujie/claude-code/0*.md /Users/sunzhangyujie/claude-code/docs/)",
-      "Bash(ls /Users/sunzhangyujie/claude-code/*.md)",
-      "Bash(/Users/sunzhangyujie/miniforge3/bin/python3 -m pytest tests/ -q --tb=line)",
-      "Bash(git rm:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(rsync -av --exclude='src/' --exclude='.git/' --exclude='data/' --exclude='__pycache__/' --exclude='.pytest_cache/' --exclude='.ruff_cache/' --exclude='.mypy_cache/' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.claude/settings.local.json' --exclude='.claude/memory/' --exclude='.env' --exclude='.env.local' --exclude='*.egg-info' --exclude='.venv/' --exclude='venv/' . /Users/sunzhangyujie/paper-workflow/)"
+      "mcp__paper_retrieval__retrieve_evidence"
     ],
-    "deny": [],
-    "additionalDirectories": [
-      "/Users/sunzhangyujie/claude-code"
-    ]
+    "deny": []
   },
   "hooks": {
     "PostToolUse": [
@@ -56,7 +46,7 @@
         "prompt": "If these retrieval results are being used to produce a single-paper analysis, verify that the final answer stays in the structure Summary -> Contributions -> Methodology -> Key Findings -> Limitations, and that each section includes at least one supporting evidence reference or an explicit note that the current library evidence is insufficient."
       },
       {
-        "matcher": "mcp__paper_ingest__ingest_paper OR mcp__paper_ingest__batch_ingest",
+        "matcher": "mcp__paper_ingest__ingest_paper",
         "type": "prompt",
         "prompt": "The ingest tool just returned. Check the response: (1) If any errors have retryable=true, note them for potential retry. (2) If status shows papers skipped due to deduplication or already-existing matches, inform the user with existing paper_ids when available. (3) If all succeeded, confirm with paper count and suggest next steps such as checking status or analyzing later."
       }
