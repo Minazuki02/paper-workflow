@@ -1,0 +1,27 @@
+app:
+  name: paper-workflow
+
+paths:
+  data_dir: ./data
+  logs_dir: ./data/logs
+  db_path: ./data/db/papers.db
+  index_dir: ./data/index
+  pdf_dir: ./data/pdfs
+
+models:
+  embedding_model: all-MiniLM-L6-v2
+
+embeddings:
+  base_url: null
+  model: null
+  timeout: 180
+
+llm:
+  base_url: null
+  model: null
+  timeout: 180
+  query_rewrite_enabled: false
+
+logging:
+  level: INFO
+  json: true

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paper-workflow-backend"
+version = "0.1.0"
+description = "Academic paper search, ingest, retrieval and analysis backend with MCP server interface."
+readme = "../README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7,<3",
+  "pyyaml>=6.0,<7",
+  "structlog>=24.1,<25",
+  "PyMuPDF>=1.24,<2",
+  "faiss-cpu>=1.8,<2",
+  "mcp>=1.0,<2",
+  "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+local-embedding = [
+  "sentence-transformers>=3.0,<4",
+]
+dev = [
+  "pytest>=8.0,<9",
+  "ruff>=0.5,<1",
+]
+all = [
+  "paper-workflow-backend[local-embedding,dev]",
+]
+
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["backend*"]
+
+[tool.pytest.ini_options]
+testpaths = ["../tests"]
+pythonpath = [".."]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]

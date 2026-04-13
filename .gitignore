@@ -1,0 +1,48 @@
+# Runtime data
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Test / lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+.python-version
+
+# Local Claude settings (may contain API keys)
+.claude/settings.local.json
+.claude/memory/
+
+# Environment secrets
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Logs (optional: uncomment if you want to track log configs but not log files)
+# data/logs/

@@ -1,0 +1,72 @@
+{
+  "mcpServers": {
+    "paper-ingest": {
+      "command": "python",
+      "args": [
+        "-m",
+        "backend.ingest.mcp_server"
+      ],
+      "cwd": ".",
+      "env": {
+        "PAPER_WORKFLOW_DATA_DIR": "./data"
+      }
+    },
+    "paper-retrieval": {
+      "command": "python",
+      "args": [
+        "-m",
+        "backend.retrieval.mcp_server"
+      ],
+      "cwd": ".",
+      "env": {
+        "PAPER_WORKFLOW_DATA_DIR": "./data"
+      }
+    }
+  },
+  "permissions": {
+    "allow": [
+      "mcp__paper_ingest__search_papers",
+      "mcp__paper_ingest__ingest_paper",
+      "mcp__paper_ingest__get_ingest_status",
+      "mcp__paper_ingest__fetch_pdf",
+      "mcp__paper_retrieval__retrieve_evidence",
+      "Bash(ls /Users/sunzhangyujie/claude-code/0*.md /Users/sunzhangyujie/claude-code/docs/)",
+      "Bash(ls /Users/sunzhangyujie/claude-code/*.md)",
+      "Bash(/Users/sunzhangyujie/miniforge3/bin/python3 -m pytest tests/ -q --tb=line)",
+      "Bash(git rm:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(rsync -av --exclude='src/' --exclude='.git/' --exclude='data/' --exclude='__pycache__/' --exclude='.pytest_cache/' --exclude='.ruff_cache/' --exclude='.mypy_cache/' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.claude/settings.local.json' --exclude='.claude/memory/' --exclude='.env' --exclude='.env.local' --exclude='*.egg-info' --exclude='.venv/' --exclude='venv/' . /Users/sunzhangyujie/paper-workflow/)"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "/Users/sunzhangyujie/claude-code"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "mcp__paper_retrieval__retrieve_evidence",
+        "type": "prompt",
+        "prompt": "Evidence retrieved. MANDATORY: When presenting these results to the user, include for each hit (1) the exact quoted text, (2) paper title, authors, and year, (3) section type and page number, and (4) the relevance score. Do not paraphrase evidence without quoting the original. Do not omit source attribution."
+      },
+      {
+        "matcher": "mcp__paper_retrieval__retrieve_evidence",
+        "type": "prompt",
+        "prompt": "If these retrieval results are being used to produce a single-paper analysis, verify that the final answer stays in the structure Summary -> Contributions -> Methodology -> Key Findings -> Limitations, and that each section includes at least one supporting evidence reference or an explicit note that the current library evidence is insufficient."
+      },
+      {
+        "matcher": "mcp__paper_ingest__ingest_paper OR mcp__paper_ingest__batch_ingest",
+        "type": "prompt",
+        "prompt": "The ingest tool just returned. Check the response: (1) If any errors have retryable=true, note them for potential retry. (2) If status shows papers skipped due to deduplication or already-existing matches, inform the user with existing paper_ids when available. (3) If all succeeded, confirm with paper count and suggest next steps such as checking status or analyzing later."
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__paper_ingest__batch_ingest",
+        "type": "prompt",
+        "prompt": "About to call batch_ingest. Before proceeding: (1) Confirm with the user the number of papers to be ingested. (2) If more than 20 papers, warn about processing time. (3) If more than 50 papers, strongly recommend doing it in smaller batches."
+      }
+    ]
+  }
+}
