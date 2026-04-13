@@ -2,6 +2,8 @@
 
 > Turn Claude Code into a research assistant. Install in one command, remove in one command. Zero residue.
 
+<p align="center"><a href="README.zh-CN.md">中文版 README</a></p>
+
 **把 Claude Code 变成论文研究助手——零侵入安装，一键拆卸。**
 
 [![Release](https://img.shields.io/github/v/release/Minazuki02/paper-workflow?include_prereleases&label=release&color=blue)](https://github.com/Minazuki02/paper-workflow/releases)
@@ -195,4 +197,4 @@ If you've adapted this for another domain, open an issue to share.
 
 ---
 
-<p align="center"><a href="README.zh-CN.md">中文版 README</a></p>
+
