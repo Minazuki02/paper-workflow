@@ -1,5 +1,12 @@
 # Paper Workflow
 
+[![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
+[![MCP](https://img.shields.io/badge/Protocol-MCP_(stdio)-8A2BE2)](https://modelcontextprotocol.io)
+[![FAISS](https://img.shields.io/badge/Vector_Search-FAISS-0467DF)](https://github.com/facebookresearch/faiss)
+[![SQLite](https://img.shields.io/badge/Metadata-SQLite_+_FTS5-003B57?logo=sqlite&logoColor=white)](https://sqlite.org)
+[![PyMuPDF](https://img.shields.io/badge/PDF_Parse-PyMuPDF-CC0000)](https://pymupdf.readthedocs.io)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 **把 Claude Code 变成你的论文研究助手，零侵入，5 分钟上手。**
 
 Claude Code 是目前最强的 AI 编程工具，但它不懂论文。
@@ -100,6 +107,21 @@ CC 原生做不到这些。Paper Workflow 让它做到了。
 
 **核心设计：CC 不碰数据，Backend 不碰用户。** 通过 MCP 协议桥接，两侧完全解耦。
 
+### Built With
+
+| 层 | 技术 | 用途 |
+|---|---|---|
+| **协议层** | [MCP](https://modelcontextprotocol.io) (stdio) | Claude Code ↔ Python Backend 的标准通信协议 |
+| **PDF 解析** | [PyMuPDF](https://pymupdf.readthedocs.io) 1.24+ | 文本提取、页码映射、元数据抽取 |
+| **向量检索** | [FAISS](https://github.com/facebookresearch/faiss) 1.8+ | 高性能相似度搜索（百万级向量 <100ms） |
+| **元数据 + 全文检索** | [SQLite](https://sqlite.org) + FTS5 | 零依赖的结构化存储 + 全文搜索引擎 |
+| **数据模型** | [Pydantic](https://docs.pydantic.dev) v2 | 强类型 schema 校验（Paper, Chunk, IngestJob 等） |
+| **Embedding** | 可选：本地 [sentence-transformers](https://sbert.net) 或任意 OpenAI-compatible API | 文本向量化，支持自选模型 |
+| **LLM** | 任意 OpenAI-compatible API | 论文分析（GLM、Qwen、GPT 等均可） |
+| **学术搜索** | [arXiv API](https://arxiv.org/help/api) + [Semantic Scholar API](https://api.semanticscholar.org) | 双源搜索、自动去重 |
+| **日志** | [structlog](https://www.structlog.org) | JSON 结构化日志 |
+| **测试** | [pytest](https://pytest.org) | 140+ 测试用例 |
+
 ---
 
 ## 快速开始
@@ -113,7 +135,7 @@ CC 原生做不到这些。Paper Workflow 让它做到了。
 ### 安装
 
 ```bash
-git clone https://github.com/你的用户名/paper-workflow.git
+git clone https://github.com/Minazuki02/paper-workflow.git
 cd paper-workflow
 
 # 安装 Python 依赖
@@ -226,17 +248,18 @@ paper-workflow/
 └── scripts/                 # 环境初始化 + 健康检查脚本
 ```
 
-## 技术栈
+## 组件可替换性
 
-| 组件 | 选型 | 可替换 |
-|------|------|--------|
-| PDF 解析 | PyMuPDF | 可换 GROBID（高质量结构化） |
-| 向量索引 | FAISS | 可换 Qdrant / Milvus |
-| 元数据存储 | SQLite + FTS5 | 可换 PostgreSQL |
-| embedding | 可配置（本地或 API） | 任意 OpenAI-compatible API |
-| LLM 分析 | 可配置 | 任意 OpenAI-compatible API |
-| 搜索源 | arXiv + Semantic Scholar | 可扩展 PubMed / DBLP |
-| MCP 协议 | FastMCP (Python) | 标准协议，语言无关 |
+所有核心组件均可按需替换，不影响其他模块：
+
+| 组件 | 当前选型 | 可替换为 |
+|------|---------|---------|
+| PDF 解析 | PyMuPDF | GROBID（高质量结构化解析） |
+| 向量索引 | FAISS | Qdrant / Milvus / Chroma |
+| 元数据存储 | SQLite + FTS5 | PostgreSQL |
+| Embedding 模型 | 可配置 | 任意 OpenAI-compatible API 或本地模型 |
+| LLM | 可配置 | 任意 OpenAI-compatible API |
+| 搜索源 | arXiv + Semantic Scholar | PubMed / DBLP / Google Scholar |
 
 ## Contributing
 
