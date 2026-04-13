@@ -15,7 +15,6 @@
 
 ## 它能做什么
 
-```
 你: /paper-search "LLM agent reasoning 2024"
 <img width="899" height="280" alt="00a7101fe6f828b8644a077b585bd726" src="https://github.com/user-attachments/assets/75bbf60b-5000-4a0b-b94b-c2399ba43f94" />
 
@@ -27,7 +26,6 @@
 你: multi-head attention 的主要变体有哪些？
 <img width="982" height="579" alt="487236c1a99b617a26dd894f9c42bf31" src="https://github.com/user-attachments/assets/6b63590e-d96f-40ac-bd75-3c6c9b637f9a" />
 
-```
 
 每一条结论都有 PDF 原文引用——不是模型在猜，是在查。
 
