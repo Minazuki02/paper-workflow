@@ -1,4 +1,5 @@
 # Paper Workflow
+![Uploading a3e7f7b86b1225a26e8b1379ee10620d.png…]()
 
 [![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?logo=python&logoColor=white)](https://python.org)
 [![MCP](https://img.shields.io/badge/Protocol-MCP_(stdio)-8A2BE2)](https://modelcontextprotocol.io)
